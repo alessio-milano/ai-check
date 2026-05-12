@@ -34,21 +34,22 @@
   --ink-4:   #a3adb6;
   --hairline: rgba(1, 67, 108, 0.12);
 
-  --bg:           var(--paper);
-  --fg:           var(--ink);
-  --fg-muted:     var(--ink-2);
-  --fg-subtle:    var(--ink-3);
-  --fg-brand:     var(--navy-800);
-  --fg-accent:    var(--coral-500);
-  --border:       var(--hairline);
+  --bg:            var(--paper);
+  --fg:            var(--ink);
+  --fg-muted:      var(--ink-2);
+  --fg-subtle:     var(--ink-3);
+  --fg-brand:      var(--navy-800);
+  --fg-accent:     var(--coral-500);
+  --border:        var(--hairline);
   --border-strong: rgba(1, 67, 108, 0.25);
 
   --font-display: 'Inter', -apple-system, system-ui, sans-serif;
   --font-body:    'Inter', -apple-system, system-ui, sans-serif;
 
-  --fs-12: 0.75rem; --fs-14: 0.875rem; --fs-16: 1rem;
-  --fs-18: 1.125rem; --fs-20: 1.25rem; --fs-24: 1.5rem;
-  --fs-32: 2rem; --fs-44: 2.75rem; --fs-60: 3.75rem;
+  --fs-10: 0.625rem; --fs-12: 0.75rem; --fs-13: 0.8125rem;
+  --fs-14: 0.875rem; --fs-15: 0.9375rem; --fs-16: 1rem;
+  --fs-18: 1.125rem; --fs-20: 1.25rem;  --fs-24: 1.5rem;
+  --fs-32: 2rem;     --fs-44: 2.75rem;  --fs-60: 3.75rem;
 
   --lh-tight: 1.05; --lh-snug: 1.15; --lh-normal: 1.45; --lh-relaxed: 1.6;
   --tr-tight: -0.02em; --tr-eyebrow: 0.18em;
@@ -87,12 +88,9 @@ body{
 }
 .topbar-brand{
   font-size:var(--fs-12);font-weight:var(--fw-semibold);
-  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
-  color:var(--navy-800);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;color:var(--navy-800);
 }
-.topbar-date{
-  font-size:var(--fs-12);color:var(--fg-subtle);
-}
+.topbar-date{font-size:var(--fs-12);color:var(--fg-subtle);}
 
 /* ── Main layout ── */
 .report-content{
@@ -100,7 +98,7 @@ body{
   padding:var(--sp-8) clamp(var(--sp-5),6vw,80px) var(--sp-9);
 }
 
-/* ── Header ── */
+/* ── Report header ── */
 .report-header{margin-bottom:var(--sp-7);}
 .report-headline{
   font-family:var(--font-display);
@@ -140,6 +138,25 @@ body{
   color:rgba(255,255,255,.48);line-height:var(--lh-relaxed);
 }
 
+/* ── Callout cards (excellence / gap) ── */
+.callout-section{margin-top:var(--sp-7);}
+.callout-card{
+  border-radius:var(--radius-lg);padding:var(--sp-5) var(--sp-6);
+  margin-bottom:var(--sp-3);
+}
+.callout-card.excellence{background:var(--navy-100);border:1px solid var(--navy-200);}
+.callout-card.gap{background:var(--coral-100);border:1px solid var(--coral-200);}
+.callout-label{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;margin-bottom:var(--sp-2);
+}
+.callout-label.excellence{color:var(--navy-700);}
+.callout-label.gap{color:var(--coral-700);}
+.callout-items{
+  font-size:var(--fs-16);font-weight:var(--fw-regular);
+  color:var(--fg);line-height:var(--lh-relaxed);
+}
+
 /* ── Section title ── */
 .section-title{
   font-family:var(--font-display);font-size:var(--fs-20);
@@ -148,11 +165,13 @@ body{
   padding-bottom:var(--sp-3);border-bottom:1px solid var(--border);
 }
 
-/* ── Bucket result ── */
+/* ── Bucket result wrapper ── */
 .bucket-result{
-  padding:var(--sp-6) 0;border-bottom:1px solid var(--border);
+  padding:var(--sp-7) 0;border-bottom:1px solid var(--border);
 }
 .bucket-result:last-child{border-bottom:none;}
+
+/* Score header row */
 .br-top{
   display:flex;justify-content:space-between;align-items:baseline;
   margin-bottom:var(--sp-3);
@@ -160,12 +179,15 @@ body{
 .br-meta{display:flex;align-items:baseline;gap:var(--sp-3);}
 .br-num{
   font-size:var(--fs-12);font-weight:var(--fw-semibold);
-  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
-  color:var(--fg-subtle);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;color:var(--fg-subtle);
 }
 .br-title{
   font-size:var(--fs-18);font-weight:var(--fw-semibold);
   color:var(--fg-brand);letter-spacing:var(--tr-tight);
+}
+.br-subtitle{
+  font-size:var(--fs-13);font-weight:var(--fw-light);
+  color:var(--fg-subtle);margin-top:2px;
 }
 .br-pct{
   font-size:var(--fs-24);font-weight:var(--fw-light);
@@ -176,48 +198,121 @@ body{
   border-radius:var(--radius-pill);overflow:hidden;margin-bottom:var(--sp-3);
 }
 .br-bar{
-  height:100%;border-radius:var(--radius-pill);background:var(--coral-500);
+  height:100%;border-radius:var(--radius-pill);
   width:0%;transition:width .8s var(--ease-out);
 }
-.br-bar.level-strong-bar{background:var(--navy-700);}
-.br-bar.level-mid-bar{background:#c49a28;}
-.br-bar.level-low-bar{background:var(--coral-500);}
+.br-bar.level-strength-bar{background:var(--navy-700);}
+.br-bar.level-developing-bar{background:#c49a28;}
+.br-bar.level-development-bar{background:var(--coral-500);}
+
 .br-level{
   font-size:11px;font-weight:var(--fw-semibold);
   letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
-  margin-bottom:var(--sp-4);
+  margin-bottom:var(--sp-5);
 }
-.level-strong{color:var(--navy-700);}
-.level-mid{color:#8A6820;}
-.level-low{color:var(--coral-600);}
-.br-paragraph{
-  font-size:var(--fs-15,0.9375rem);font-weight:var(--fw-light);
-  color:var(--fg-muted);line-height:var(--lh-relaxed);
+.level-strength{color:var(--navy-700);}
+.level-developing{color:#8A6820;}
+.level-development{color:var(--coral-600);}
+
+/* ── Hero stat ── */
+.hero-stat{
+  display:grid;grid-template-columns:auto 1fr;gap:var(--sp-5);
+  align-items:center;
+  background:var(--bone);border-radius:var(--radius-lg);
+  padding:var(--sp-5) var(--sp-6);
+  margin-bottom:var(--sp-4);
+  border-left:3px solid var(--coral-500);
+}
+.hero-value{
+  font-family:var(--font-display);font-size:var(--fs-44);
+  font-weight:var(--fw-light);letter-spacing:var(--tr-tight);
+  color:var(--coral-500);line-height:1;white-space:nowrap;
+}
+.hero-body{}
+.hero-label{
+  font-size:var(--fs-16);font-weight:var(--fw-regular);
+  color:var(--fg);line-height:var(--lh-relaxed);margin-bottom:var(--sp-2);
+}
+.hero-source{
+  font-size:var(--fs-10);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;color:var(--ink-4);
 }
 
-/* ── Callout cards (excellence / gap) ── */
-.callout-section{margin-top:var(--sp-7);}
-.callout-card{
-  border-radius:var(--radius-lg);padding:var(--sp-5) var(--sp-6);
-  margin-bottom:var(--sp-3);
+/* ── Supporting stats grid ── */
+.supporting-stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:var(--sp-3);margin-bottom:var(--sp-5);
 }
-.callout-card.excellence{
-  background:var(--navy-100);border:1px solid var(--navy-200);
+.sup-stat{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-md);padding:var(--sp-4);
 }
-.callout-card.gap{
-  background:var(--coral-100);border:1px solid var(--coral-200);
-}
-.callout-label{
-  font-size:var(--fs-12);font-weight:var(--fw-semibold);
-  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+.sup-value{
+  font-family:var(--font-display);font-size:var(--fs-24);
+  font-weight:var(--fw-light);color:var(--navy-700);
+  letter-spacing:var(--tr-tight);line-height:1;
   margin-bottom:var(--sp-2);
 }
-.callout-label.excellence{color:var(--navy-700);}
-.callout-label.gap{color:var(--coral-700);}
-.callout-items{
-  font-size:var(--fs-16);font-weight:var(--fw-regular);
+.sup-label{
+  font-size:var(--fs-13);color:var(--fg-muted);
+  line-height:1.5;margin-bottom:var(--sp-1);
+}
+.sup-source{
+  font-size:var(--fs-10);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;color:var(--ink-4);
+}
+
+/* ── Diagnostic ── */
+.br-diagnostic{
+  font-size:var(--fs-15);font-weight:var(--fw-light);
+  color:var(--fg-muted);line-height:var(--lh-relaxed);
+  margin-bottom:var(--sp-4);
+}
+
+/* ── Implication ── */
+.br-implication{
+  border-left:2px solid var(--coral-500);
+  padding:var(--sp-3) var(--sp-5);
+  background:var(--coral-100);
+  border-radius:0 var(--radius-md) var(--radius-md) 0;
+}
+.implication-eyebrow{
+  font-size:var(--fs-10);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:var(--coral-700);margin-bottom:var(--sp-1);
+}
+.implication-text{
+  font-size:var(--fs-15);font-weight:var(--fw-regular);
   color:var(--fg);line-height:var(--lh-relaxed);
 }
+
+/* ── References ── */
+.references-section{
+  margin-top:var(--sp-9);padding-top:var(--sp-6);
+  border-top:1px solid var(--border);
+}
+.references-title{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:var(--sp-5);
+}
+.reference-item{
+  display:grid;grid-template-columns:100px 1fr;gap:var(--sp-3);
+  margin-bottom:var(--sp-3);align-items:start;
+}
+.ref-id{
+  font-size:var(--fs-10);font-weight:var(--fw-semibold);
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-4);padding-top:3px;
+}
+.ref-body{
+  font-size:var(--fs-13);color:var(--fg-muted);line-height:var(--lh-relaxed);
+}
+.ref-body a{
+  color:var(--navy-600);text-decoration:none;
+}
+.ref-body a:hover{text-decoration:underline;}
 
 /* ── Footer ── */
 .report-footer{
@@ -250,10 +345,17 @@ body{
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── Responsive ── */
-@media(max-width:560px){
+@media(max-width:600px){
   .overall-card{grid-template-columns:1fr;gap:var(--sp-4);}
   .overall-score{text-align:left;}
   .overall-score-label{text-align:left;}
+  .hero-stat{grid-template-columns:1fr;gap:var(--sp-3);}
+  .hero-value{font-size:var(--fs-32);}
+  .supporting-stats{grid-template-columns:1fr 1fr;}
+  .reference-item{grid-template-columns:80px 1fr;}
+}
+@media(max-width:400px){
+  .supporting-stats{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -299,9 +401,14 @@ body{
       </div>
     </div>
 
-    <div style="margin-top:var(--sp-7);">
+    <div style="margin-top:var(--sp-8);">
       <div class="section-title">Five-dimension breakdown</div>
       <div id="bucketResults"></div>
+    </div>
+
+    <div class="references-section">
+      <div class="references-title">Research sources</div>
+      <div id="referencesList"></div>
     </div>
 
     <div class="report-footer">
@@ -312,64 +419,365 @@ body{
 </div>
 
 <script>
+/* ─────────────────────────────────────────────
+   Supabase
+───────────────────────────────────────────── */
 const SUPABASE_URL = 'https://rwmiigbkytnguufskjpx.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWlpZ2JreXRuZ3V1ZnNranB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjczNTQsImV4cCI6MjA5MzYwMzM1NH0.6kVnnO_r7X_0Pkjw-eWZb8lquZ02iprsyrG7bzG1Erc';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/* ─────────────────────────────────────────────
+   Bucket labels
+───────────────────────────────────────────── */
 const BUCKET_LABELS = [
-  { num: '01', title: 'Current state' },
-  { num: '02', title: 'Deep AI literacy' },
-  { num: '03', title: 'Workforce redesign' },
-  { num: '04', title: 'AI resilience' },
-  { num: '05', title: 'Ownership & culture' },
+  { num: '01', title: 'Current state',      subtitle: 'Governance, ownership & direction' },
+  { num: '02', title: 'Deep AI literacy',   subtitle: 'Understanding how AI works, where it fails, and how to verify its outputs' },
+  { num: '03', title: 'Workforce redesign', subtitle: 'Rethinking roles, tasks, and what high-value human work looks like' },
+  { num: '04', title: 'AI resilience',      subtitle: 'Risk, regulation, continuity, and dependency management' },
+  { num: '05', title: 'Ownership & culture',subtitle: 'Co-ownership, employee voice, and the cultural conditions for sustained transformation' },
 ];
 
+/* ─────────────────────────────────────────────
+   Embedded content (from ai_readiness_feedback_structured.json v2.0)
+───────────────────────────────────────────── */
+const CONTENT = {
+  "meta": {
+    "sources": [
+      { "id": "MSFT-WTI",  "label": "Microsoft 2026 Work Trend Index",                    "detail": "Survey of 20,000 AI-using workers across 10 countries + Microsoft 365 Copilot telemetry (May 2026)",       "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/2026-annual-report" },
+      { "id": "MCK-AI",    "label": "McKinsey, State of AI 2025",                          "detail": "Global survey on AI adoption, scaling, workflow redesign, and EBIT impact (November 2025)",                 "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" },
+      { "id": "MCK-ORG",   "label": "McKinsey, State of Organizations 2026",               "detail": "Survey of 10,018 respondents on organisational readiness for AI (February 2026)",                           "url": "https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/the-state-of-organizations" },
+      { "id": "WEF-FOJ",   "label": "WEF, Future of Jobs Report 2025",                    "detail": "Survey of 1,000+ employers representing 14 million workers across 55 economies (January 2025)",             "url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/" },
+      { "id": "LI-LMR",   "label": "LinkedIn, 2026 Labour Market Report",                 "detail": "Global hiring trends, AI-related job creation, and AI skills demand (January 2026)",                        "url": "https://economicgraph.linkedin.com/workforce-data" },
+      { "id": "LI-SKILLS", "label": "LinkedIn, 2026 Skills on the Rise",                  "detail": "Analysis of fastest-growing skills and AI literacy demand in job postings (January 2026)",                  "url": "https://www.linkedin.com/business/talent/blog/talent-strategy/linkedin-skills-on-the-rise" },
+      { "id": "EU-AIA",    "label": "EU AI Act (Regulation 2024/1689)",                    "detail": "World's first comprehensive AI regulation. AI literacy obligations since Feb 2025; high-risk enforcement Aug 2026.", "url": "https://artificialintelligenceact.eu/" },
+      { "id": "VC-2026",   "label": "Vision Compliance, 2026 EU AI Act Readiness Analysis","detail": "Compliance assessments across eight industries (April 2026)",                                               "url": "https://natlawreview.com/press-releases/vision-compliance-releases-2026-eu-ai-act-readiness-report-finds-78" },
+      { "id": "MSFT-PS",   "label": "Microsoft People Science, Agentic Teaming & Trust",  "detail": "Study of 1,800 employees globally on manager impact on AI adoption (July 2025)",                            "url": "https://www.microsoft.com/en-us/worklab/work-trend-index/2026-annual-report" },
+      { "id": "DT-AI",     "label": "Deloitte, State of AI in the Enterprise 2026",        "detail": "Survey of 3,235 senior leaders across 24 countries (August–September 2025)",                               "url": "https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html" },
+      { "id": "DT-HALL",   "label": "Deloitte, AI Hallucination Enterprise Impact",        "detail": "47% of enterprise AI users made at least one major decision based on hallucinated content in 2024",        "url": "https://www.deloitte.com/us/en/what-we-do/capabilities/applied-artificial-intelligence/content/state-of-ai-in-the-enterprise.html" }
+    ]
+  },
+  "buckets": [
+    {
+      "bucket_id": 0,
+      "bands": [
+        {
+          "score_min": 0, "score_max": 29,
+          "headline_stat": { "value": "26%", "label": "of AI-using employees say their leadership is clearly and consistently aligned on AI.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "2×",  "label": "Organisational factors (culture, manager support, talent practices) account for twice the AI impact of individual effort alone.", "source": "MSFT-WTI" },
+            { "value": "88%", "label": "of organisations now use AI in at least one function — but nearly two-thirds haven't begun scaling it enterprise-wide.", "source": "MCK-AI" },
+            { "value": "78%", "label": "of organisations across eight industries have not taken meaningful steps toward EU AI Act compliance.", "source": "VC-2026" }
+          ],
+          "diagnostic": "Your organisation lacks the basic governance structures needed to drive AI transformation. Without a named owner, shared success metrics, or a concrete target picture, AI adoption becomes fragmented and reactive. Three out of four organisations in your position have not even begun to address the regulatory requirements now arriving — the EU AI Act reaches its key enforcement date for high-risk systems on 2 August 2026, requiring organisations to classify every AI system in operation, assign accountability, and maintain documented oversight. These obligations are impossible to meet without governance foundations in place.",
+          "implication": "Establishing clear ownership, a concrete target picture, and leadership alignment is not one of several priorities — it is the prerequisite for everything else."
+        },
+        {
+          "score_min": 30, "score_max": 79,
+          "headline_stat": { "value": "65%", "label": "of AI users fear falling behind if they don't adapt quickly — yet 45% say it feels safer to focus on current goals than to redesign work with AI.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "13%",  "label": "of AI users say they're rewarded for reinvention even when results aren't immediately met.", "source": "MSFT-WTI" },
+            { "value": "~⅓",  "label": "of organisations have fundamentally redesigned any workflows as a result of AI deployment.", "source": "MCK-AI" },
+            { "value": "34%",  "label": "of enterprises are truly reimagining the business with AI. The rest are optimising existing processes.", "source": "DT-AI" }
+          ],
+          "diagnostic": "Some foundations are in place — there is awareness of where you stand and some leadership engagement — but the structures that make AI transformation coherent are still incomplete. Microsoft's 2026 research calls this the \"Transformation Paradox\": the pull to perform collides with the push to transform. Your people sense the urgency but the system around them — metrics, incentives, and norms — still reinforces the old way of working. McKinsey's data confirms this is the majority position: most organisations have adopted AI but fewer than one in three have redesigned how work actually gets done. Deloitte's 2026 enterprise survey found the same pattern — two-thirds report productivity gains, but only a third are using AI to genuinely transform rather than optimise.",
+          "implication": "The priority is converting intent into specific, accountable commitments — with defined ownership, a concrete target picture, and success metrics that go beyond adoption numbers — before the gap to leading organisations widens further."
+        },
+        {
+          "score_min": 80, "score_max": 100,
+          "headline_stat": { "value": "19%", "label": "of AI users globally sit in the \"Frontier\" zone where individual capability and organisational readiness reinforce each other.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "20,000",   "label": "workers surveyed across 10 countries by Microsoft to establish this benchmark.", "source": "MSFT-WTI" },
+            { "value": "5.5%",     "label": "of organisations qualify as \"AI high performers\" reporting significant value and attributing >5% of EBIT to AI.", "source": "MCK-AI" },
+            { "value": "Aug 2026", "label": "The EU AI Act's enforcement milestone for high-risk systems will reward organisations that already have accountability structures and AI inventories in place.", "source": "EU-AIA" }
+          ],
+          "diagnostic": "You have the governance and clarity that most organisations lack at this stage. Leadership alignment, clear ownership, and a concrete target picture put you in a strong position to scale AI initiatives with intention rather than by accident. Microsoft's 2026 Work Trend Index calls organisations in this position \"Frontier Firms\". McKinsey's research shows that the companies extracting the most value from AI are not just deploying tools — they are building operating models that turn local gains into institutional advantage. Deloitte's 2026 enterprise survey found that enterprises where senior leadership actively shapes AI governance achieve significantly greater business value than those delegating the work to technical teams alone.",
+          "implication": "Your challenge now is sustaining this advantage as the regulatory and competitive landscape accelerates — and ensuring your governance evolves from static policies to a dynamic operating model."
+        }
+      ]
+    },
+    {
+      "bucket_id": 1,
+      "bands": [
+        {
+          "score_min": 0, "score_max": 29,
+          "headline_stat": { "value": "49%", "label": "of all AI assistant interactions involve cognitive work — analysis, problem-solving, evaluation, creative thinking — not simple task execution.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "50% / 46%", "label": "of AI users say quality control of AI output and critical thinking are the most important human skills as AI takes on more work.", "source": "MSFT-WTI" },
+            { "value": "47%",       "label": "of enterprise AI users made at least one major business decision based on hallucinated AI content in 2024.", "source": "DT-HALL" },
+            { "value": "39%",       "label": "of core workplace skills will change by 2030, with AI and big data literacy at the top of the list.", "source": "WEF-FOJ" },
+            { "value": "Art. 4",    "label": "The EU AI Act has made AI literacy a legal obligation since February 2025 — organisations must ensure staff have sufficient understanding to operate and oversee AI systems.", "source": "EU-AIA" }
+          ],
+          "diagnostic": "Your teams are using AI tools without the conceptual grounding to use them well. This is a widespread and underestimated risk. When nearly half of all AI interactions already involve reasoning-level work, the human's job is no longer to generate answers but to evaluate, refine, and own them. Without understanding how these systems work and where they fail, your people cannot fulfil that role. The Deloitte finding that nearly half of enterprise AI users have already acted on hallucinated content underscores the operational cost of this gap — bad outputs accepted uncritically, false information treated as fact, and decisions delegated to systems that are not accountable for them.",
+          "implication": "Foundational AI literacy is not optional — it is both an operational necessity and, increasingly, a regulatory requirement. The EU AI Act has been enforceable on AI literacy since February 2025."
+        },
+        {
+          "score_min": 30, "score_max": 79,
+          "headline_stat": { "value": "43% vs. 30%", "label": "Frontier Professionals intentionally do some work without AI to keep their skills sharp — compared to 30% of other AI users.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "53% vs. 33%", "label": "Frontier Professionals pause before starting work to decide what should be done by AI versus by a human.", "source": "MSFT-WTI" },
+            { "value": "70%+",        "label": "year-over-year growth in job postings requiring AI literacy skills.", "source": "LI-SKILLS" },
+            { "value": "#1 barrier",  "label": "Insufficient worker skills are the biggest barrier to integrating AI into existing workflows.", "source": "DT-AI" },
+            { "value": "86%",         "label": "of AI users say they treat AI output as a starting point — but behavioural data shows far fewer consistently apply this discipline.", "source": "MSFT-WTI" }
+          ],
+          "diagnostic": "There is growing awareness of AI capabilities, but the deeper literacy needed — understanding model behaviour, verifying outputs, and mapping which decisions can safely be delegated to AI — is still patchy. The difference between average and advanced AI users is not tool access; it is judgment. Microsoft's data shows that the most effective professionals deliberately maintain their own skills and consciously choose what to delegate. Meanwhile, Deloitte's 2026 enterprise survey found that insufficient worker skills are the single biggest barrier organisations report when integrating AI into workflows — ahead of technology, data, and even governance. The labour market is also sending a clear signal: LinkedIn data shows AI literacy demand in job postings growing by over 70% year-over-year.",
+          "implication": "Closing this gap will determine whether AI augments your people's judgment or quietly undermines it — whether your teams become the evaluators of AI output or the uncritical acceptors of it."
+        },
+        {
+          "score_min": 80, "score_max": 100,
+          "headline_stat": { "value": "16%", "label": "of AI users qualify as Frontier Professionals — those who consistently apply critical judgment, redesign workflows, and share standards with their teams.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "80%", "label": "of Frontier Professionals say they're producing work they couldn't have a year ago — compared to 58% of all AI users.", "source": "MSFT-WTI" },
+            { "value": "86%", "label": "of businesses will be affected by AI and information processing technologies by 2030.", "source": "WEF-FOJ" },
+            { "value": "92%", "label": "year-over-year increase in the share of learning time spent on AI-related courses across LinkedIn.", "source": "LI-SKILLS" }
+          ],
+          "diagnostic": "Your leaders and teams demonstrate genuine AI literacy — not just familiarity with tools, but an understanding of how they work, where they fail, and how to verify their outputs. This places you in a strong position. The behavioural data is more telling than the self-reported data: while most AI users claim they treat AI output critically, only a small fraction consistently act that way in practice. Your literacy levels align with the leading group that Microsoft identifies as Frontier Professionals — the 16% who are not just using AI but actively shaping how it is used. The World Economic Forum estimates that AI will affect 86% of businesses by 2030, meaning the literacy advantage you hold today will only grow in value.",
+          "implication": "The opportunity now is to institutionalise this literacy — making it transferable across teams and durable over time, not dependent on a few advanced individuals."
+        }
+      ]
+    },
+    {
+      "bucket_id": 2,
+      "bands": [
+        {
+          "score_min": 0, "score_max": 29,
+          "headline_stat": { "value": "21%", "label": "of organisations have fundamentally redesigned any workflows as a result of AI — yet workflow redesign is the #1 predictor of measurable financial impact from AI.", "source": "MCK-AI" },
+          "supporting_stats": [
+            { "value": "66%",      "label": "of AI users say AI has allowed them to spend more time on high-value work.", "source": "MSFT-WTI" },
+            { "value": "58%",      "label": "say they are producing work they could not have produced a year ago.", "source": "MSFT-WTI" },
+            { "value": "+78M net", "label": "The WEF projects 170 million new jobs created and 92 million displaced by 2030 — a net gain of 78 million, but only for organisations that deliberately redesign work.", "source": "WEF-FOJ" },
+            { "value": "2.8×",    "label": "AI high performers are 2.8× more likely than others to have fundamentally redesigned workflows.", "source": "MCK-AI" }
+          ],
+          "diagnostic": "AI adoption is happening without systematic workforce redesign. Tasks are being automated in practice, but roles, expectations, and definitions of high-value work have not been updated to reflect this. This matters because the potential is real — two-thirds of AI users already report spending more time on high-value work — but that potential only translates into organisational value when roles are redesigned around it. McKinsey's finding that workflow redesign is the single strongest predictor of financial impact, yet only one in five organisations have done it, captures the gap precisely. Without deliberate redesign, the efficiency gains of AI create invisible gaps: people doing work that machines should handle, machines producing outputs that nobody evaluates, and elevated human work that nobody has defined.",
+          "implication": "The risk is not that AI will replace people. The risk is that unredesigned organisations will fail to capture the value AI is already creating at the individual level."
+        },
+        {
+          "score_min": 30, "score_max": 79,
+          "headline_stat": { "value": "4 modes", "label": "of working with AI — delegation, collaboration, asking, and exploration. The most effective professionals know which mode each task calls for.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "2.8×", "label": "AI high performers are nearly three times more likely than others to have fundamentally redesigned workflows.", "source": "MCK-AI" },
+            { "value": "34%",  "label": "of enterprises are using AI to deeply transform — creating new products/services or reinventing core processes. The rest are still optimising existing ones.", "source": "DT-AI" },
+            { "value": "50%",  "label": "of AI high performers intend to use AI to transform their businesses, and most are redesigning workflows to do so.", "source": "MCK-AI" }
+          ],
+          "diagnostic": "You have begun to map how AI changes work, but formal redesign — retiring tasks, redefining roles, articulating what elevated human work looks like — remains incomplete. Microsoft's 2026 research offers a useful framing: work with AI now falls into four distinct modes, and the most effective professionals are those who know which mode a task calls for. That kind of intentional design does not happen by accident; it requires organisations to formally rethink what each role is for. Deloitte's 2026 enterprise survey found that only about a third of organisations are using AI to genuinely transform rather than optimise — the rest are layering AI onto existing processes without changing the work itself.",
+          "implication": "The organisations that capture the most value from AI are those that redesign deliberately, not incrementally — moving beyond \"same job, plus AI\" to a genuine rearchitecture of where human value lies."
+        },
+        {
+          "score_min": 80, "score_max": 100,
+          "headline_stat": { "value": "1.3M", "label": "AI-related job opportunities created by employers in the past two years — including roles that did not exist five years ago.", "source": "LI-LMR" },
+          "supporting_stats": [
+            { "value": "< 1 in 5", "label": "organisations have shifted from \"what tasks define my job?\" to \"what outcomes am I now positioned to drive?\"", "source": "MSFT-WTI" },
+            { "value": "15×",      "label": "year-over-year growth in active AI agents in the Microsoft 365 ecosystem — rising to 18× in large enterprises.", "source": "MSFT-WTI" },
+            { "value": "170M",     "label": "new jobs projected globally by 2030, alongside 92M displaced — redesigned organisations capture the net gain.", "source": "WEF-FOJ" }
+          ],
+          "diagnostic": "You are ahead of most organisations on workforce redesign — roles are being actively rethought, not just augmented, and you can articulate what elevated human work looks like in your context. Microsoft's 2026 research describes this as a fundamental shift in how professionals define their value: not by the tasks they perform, but by the outcomes they drive. Fewer than one in five organisations have made this reframing. LinkedIn's data shows the labour market is already responding — over a million new AI-related roles have emerged in just two years, and the number of active AI agents in enterprise ecosystems is growing at 15× year-over-year. Your organisation is positioned to absorb this evolution proactively.",
+          "implication": "The advantage now is to make redesign continuous — not a one-off restructuring, but an ongoing capability that evolves as AI capabilities change quarter by quarter."
+        }
+      ]
+    },
+    {
+      "bucket_id": 3,
+      "bands": [
+        {
+          "score_min": 0, "score_max": 29,
+          "headline_stat": { "value": "78%", "label": "of organisations across eight industries have not taken meaningful steps toward EU AI Act compliance.", "source": "VC-2026" },
+          "supporting_stats": [
+            { "value": "€35M / 7%", "label": "Maximum penalties under the EU AI Act for prohibited AI practices — €35 million or 7% of global annual turnover.", "source": "EU-AIA" },
+            { "value": "47%",       "label": "of enterprise AI users made at least one major business decision based on hallucinated AI content in 2024.", "source": "DT-HALL" },
+            { "value": "13%",       "label": "of AI users say they're rewarded for reinvention even when results aren't immediately met — signalling a culture where surfacing risk is disincentivised.", "source": "MSFT-WTI" },
+            { "value": "60%",       "label": "of AI leaders cite integration with legacy systems and risk/compliance concerns as top barriers to agentic AI adoption.", "source": "DT-AI" }
+          ],
+          "diagnostic": "Your organisation carries significant unexamined AI risk. Dependency on tools that could be withdrawn, unreviewed contract exposure, unanswered regulatory questions, and eroding human expertise are all live vulnerabilities. The regulatory dimension alone is substantial — the EU AI Act reaches its key enforcement milestone in August 2026, and most organisations have not prepared. But the risk goes beyond regulation: nearly half of enterprise AI users have already made significant business decisions based on AI-generated content that was factually wrong. When the organisational culture also fails to reward people for flagging risks and experimenting with new approaches, these vulnerabilities compound silently.",
+          "implication": "Resilience is not a future concern — it is an immediate operational, legal, and strategic priority that requires action across regulation, contracts, human capability, and organisational culture simultaneously."
+        },
+        {
+          "score_min": 30, "score_max": 79,
+          "headline_stat": { "value": "15×", "label": "year-over-year growth in active AI agents in enterprise ecosystems — rising to 18× in large enterprises. Most organisations are not capturing or reviewing the signals these agents generate.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "> 50%",    "label": "of organisations lack even a basic inventory of AI systems currently in production — a prerequisite for both risk management and regulatory compliance.", "source": "EU-AIA" },
+            { "value": "Aug 2026", "label": "High-risk AI system requirements become enforceable — including risk management systems, data governance, technical documentation, and human oversight.", "source": "EU-AIA" },
+            { "value": "9.2%",     "label": "Average hallucination rate across AI models for general knowledge questions — rising to 17–33% in specialised domains like legal and medical.", "source": "DT-HALL" },
+            { "value": "76%",      "label": "of enterprises now include human-in-the-loop processes to catch AI errors before deployment.", "source": "DT-HALL" }
+          ],
+          "diagnostic": "Some resilience risks have been identified, but the picture is incomplete. Gaps in continuity planning, regulatory mapping, or contract review leave your organisation exposed in ways that may only become visible under pressure. The scale of agent deployment is accelerating far faster than most governance structures can keep up with — Microsoft's data shows active AI agents growing 15× year-over-year, generating signals about what works and what fails that most organisations are not systematically capturing. The EU AI Act requires documented AI inventories, risk classifications, and ongoing human oversight, and over half of organisations don't even have a basic inventory of what AI systems they're running.",
+          "implication": "A structured risk review across regulatory, operational, contractual, and human-capability dimensions is worth prioritising now — not after the August 2026 enforcement deadline arrives."
+        },
+        {
+          "score_min": 80, "score_max": 100,
+          "headline_stat": { "value": "65% vs. 23%", "label": "AI high performers are far more likely than others to have defined \"human-in-the-loop\" validation processes.", "source": "MCK-AI" },
+          "supporting_stats": [
+            { "value": "Feb 2025", "label": "AI literacy obligations under the EU AI Act have been in force since February 2025 — organisations with proactive governance are already compliant.", "source": "EU-AIA" },
+            { "value": "91%",      "label": "of enterprises have now implemented explicit hallucination mitigation protocols — up from a minority just two years ago.", "source": "DT-HALL" },
+            { "value": "3×",       "label": "AI high performers are three times more likely to have strong senior leadership engagement in AI governance.", "source": "MCK-AI" }
+          ],
+          "diagnostic": "You have examined your AI dependencies and vulnerabilities with more rigour than most. Your continuity planning, regulatory awareness, and contract hygiene put you in a defensible position. The EU AI Act's phased enforcement rewards organisations that have built governance proactively — AI literacy obligations have already been in force since February 2025, and high-risk system requirements arrive in August 2026. McKinsey's research consistently shows that high performers are not just better at deploying AI; they are dramatically better at governing it, with defined validation processes and strong senior leadership engagement.",
+          "implication": "Your resilience posture positions you not only to manage risk but to move faster than competitors who will be forced to pause and retrofit governance under regulatory pressure. This is a speed advantage, not just a defensive one."
+        }
+      ]
+    },
+    {
+      "bucket_id": 4,
+      "bands": [
+        {
+          "score_min": 0, "score_max": 29,
+          "headline_stat": { "value": "2.5×", "label": "Organisational AI culture is approximately two and a half times stronger as a predictor of AI value than any individual factor — including personal mindset and skill level.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "10%",         "label": "of AI users are \"blocked\" — highly capable individuals in organisations that haven't built the systems to support them.", "source": "MSFT-WTI" },
+            { "value": "85%",         "label": "of employers plan to offer upskilling programmes — but without cultural embedding, training alone doesn't translate into transformation.", "source": "WEF-FOJ" },
+            { "value": "81% vs. 67%", "label": "Leaders are more likely than employees to report feeling safe suggesting new ways of working with AI — revealing a perception gap at the top.", "source": "MSFT-WTI" },
+            { "value": "50%",         "label": "of workers who are employee-access AI users had their access expanded by 50% in 2025 — yet most are still stuck in experimentation mode.", "source": "DT-AI" }
+          ],
+          "diagnostic": "AI is being deployed to your workforce rather than developed with them. Low participation in tool selection, limited channels for bottom-up innovation, and adoption measured by attendance rather than behaviour change are all signals that the cultural conditions for sustained AI transformation are not yet in place. The data is unequivocal: organisational culture is the single strongest predictor of whether employees report real value from AI — stronger than any individual skill, mindset, or demographic factor. Microsoft's research also reveals a dangerous perception gap: leaders consistently overestimate how safe employees feel to experiment with AI. Meanwhile, one in ten of your most capable AI users may be \"blocked\" — skilled individuals whose energy is being wasted because the organisation hasn't created the conditions for them to apply what they know.",
+          "implication": "Without co-ownership, your most capable people will either disengage, work around your systems, or leave. Culture is not a soft topic here — it is the primary determinant of AI value."
+        },
+        {
+          "score_min": 30, "score_max": 79,
+          "headline_stat": { "value": "+17 pts", "label": "When managers actively model AI use, employees report a 17-point lift in AI value, a 22-point lift in critical thinking, and a 30-point lift in trust in agentic AI.", "source": "MSFT-PS" },
+          "supporting_stats": [
+            { "value": "63% vs. 32%", "label": "Frontier Professionals say their teams brainstorm and refine business processes together to identify AI opportunities — compared to 32% of others.", "source": "MSFT-WTI" },
+            { "value": "61% vs. 36%", "label": "Frontier Professionals share AI tips, learnings, and mistakes with colleagues.", "source": "MSFT-WTI" },
+            { "value": "85% vs. 64%", "label": "Frontier Professionals are significantly more likely to say their manager openly uses AI.", "source": "MSFT-WTI" },
+            { "value": "1.4×",        "label": "When managers create psychological safety around experimentation, employees are 1.4× more likely to be high-frequency users of agentic AI.", "source": "MSFT-PS" }
+          ],
+          "diagnostic": "There is intent to involve employees in AI adoption, but co-ownership — where teams actively design, test, and own their own AI workflows — is not yet the norm. The data shows precisely where the lever is: manager behaviour. When managers actively model AI use and create space for experimentation, every measured outcome improves — value perception, critical thinking, and trust all rise by double-digit points. Among the most advanced AI users, nearly two-thirds brainstorm AI opportunities with their teams and share learnings openly. This doesn't require new technology or new budgets; it requires a cultural shift in how managers show up. McKinsey's State of Organisations 2026 report reinforces this, noting that organisations where leaders actively champion AI see measurably higher adoption and value realisation.",
+          "implication": "Shifting from deployment to co-creation — giving teams genuine voice in tool selection, visible channels for innovation, and recognition for changing how work gets done — is the lever most likely to unlock durable, self-reinforcing adoption."
+        },
+        {
+          "score_min": 80, "score_max": 100,
+          "headline_stat": { "value": "19%", "label": "of organisations function as \"Learning Systems\" — where work continuously produces insight, and insight continuously reshapes how work gets done.", "source": "MSFT-WTI" },
+          "supporting_stats": [
+            { "value": "54% vs. 29%", "label": "Frontier Professionals say their teams discuss quality standards for AI-assisted work — nearly double other users.", "source": "MSFT-WTI" },
+            { "value": "~2×",         "label": "Documented, repeatable agent workflows are nearly twice as common among Frontier Professionals as among other users.", "source": "MSFT-WTI" },
+            { "value": "92%",         "label": "year-over-year increase in the share of learning time spent on AI-related courses — the workforce is hungry to participate.", "source": "LI-SKILLS" },
+            { "value": "26% vs. 11%", "label": "Frontier Professionals are more than twice as likely to say they are rewarded for reinvention regardless of outcome.", "source": "MSFT-WTI" }
+          ],
+          "diagnostic": "Your organisation demonstrates genuine co-ownership of AI adoption. Employees have voice in tool selection, real channels for innovation, and visible examples of redesigning their own work. This cultural foundation is what separates organisations that sustain AI transformation from those that plateau after the initial rollout. Microsoft's 2026 Work Trend Index calls this becoming a \"Learning System\" — and the data shows what that looks like in practice: teams that discuss quality standards, document repeatable workflows, and reward reinvention regardless of short-term results. Only about one in five organisations operate this way. LinkedIn's data confirms the appetite exists broadly — AI learning time is up 92% year-over-year — but converting that appetite into institutional capability requires exactly the kind of cultural infrastructure you've built.",
+          "implication": "You are positioned to build what Microsoft calls \"Owned Intelligence\" — institutional know-how that compounds over time, is unique to your firm, and hard to replicate. This is the ultimate competitive moat in the AI era."
+        }
+      ]
+    }
+  ]
+};
+
+/* ─────────────────────────────────────────────
+   Helper functions
+───────────────────────────────────────────── */
+function getSource(id) {
+  return CONTENT.meta.sources.find(s => s.id === id) || null;
+}
+
+function getBandContent(bucketId, pct) {
+  const bucket = CONTENT.buckets.find(b => b.bucket_id === bucketId);
+  if (!bucket) return null;
+  return bucket.bands.find(b => pct >= b.score_min && pct <= b.score_max) || null;
+}
+
+/* Display bands — separate from content selection */
 function levelInfo(pct) {
-  if (pct >= 80) return ['Area of excellence', 'level-strong', 'level-strong-bar'];
-  if (pct >= 30) return ['Developing',          'level-mid',    'level-mid-bar'];
-  return             ['Critical gap',           'level-low',    'level-low-bar'];
+  if (pct >= 75) return ['Strength',             'level-strength',    'level-strength-bar'];
+  if (pct >= 40) return ['Developing',            'level-developing',  'level-developing-bar'];
+  return                 ['Area of development',  'level-development', 'level-development-bar'];
+}
+
+function overallLevel(avg) {
+  if (avg >= 75) return 'Strong foundation';
+  if (avg >= 40) return 'Developing';
+  return 'Area of development';
 }
 
 function overallMessage(avg) {
-  if (avg >= 70) return 'Your organisation has solid AI readiness foundations across most dimensions. The priority now is closing specific gaps and accelerating the areas that lag behind.';
+  if (avg >= 75) return 'Your organisation has solid AI readiness foundations across most dimensions. The priority now is closing specific gaps and accelerating the areas that lag behind.';
   if (avg >= 40) return 'You have real foundations in some areas, but meaningful gaps exist that will limit your AI transformation if left unaddressed. A structured programme across all three pillars is the right next step.';
   return 'Your organisation is at an early stage of AI readiness. Starting from clarity is better than starting from false confidence. A Human-First AI Transformation can be designed from the ground up.';
 }
 
-function overallLevel(avg) {
-  if (avg >= 70) return 'Strong foundation';
-  if (avg >= 40) return 'Developing';
-  return 'Early stage';
+/* ─────────────────────────────────────────────
+   Rendering
+───────────────────────────────────────────── */
+function renderBucket(b) {
+  const label = BUCKET_LABELS[b.id];
+  const [lvlText, lvlClass, barClass] = levelInfo(b.pct);
+  const content = getBandContent(b.id, b.pct);
+
+  let html = `
+    <div class="bucket-result">
+      <div class="br-top">
+        <div class="br-meta">
+          <span class="br-num">${label.num}</span>
+          <div>
+            <div class="br-title">${label.title}</div>
+            <div class="br-subtitle">${label.subtitle}</div>
+          </div>
+        </div>
+        <div class="br-pct">${b.pct}%</div>
+      </div>
+      <div class="br-bar-wrap"><div class="br-bar ${barClass}" style="width:${b.pct}%"></div></div>
+      <div class="br-level ${lvlClass}">${lvlText}</div>`;
+
+  if (content) {
+    /* Hero stat */
+    const heroSrc = getSource(content.headline_stat.source);
+    html += `
+      <div class="hero-stat">
+        <div class="hero-value">${content.headline_stat.value}</div>
+        <div class="hero-body">
+          <div class="hero-label">${content.headline_stat.label}</div>
+          <div class="hero-source">${heroSrc ? heroSrc.label : content.headline_stat.source}</div>
+        </div>
+      </div>`;
+
+    /* Supporting stats */
+    html += `<div class="supporting-stats">`;
+    content.supporting_stats.forEach(stat => {
+      const src = getSource(stat.source);
+      html += `
+        <div class="sup-stat">
+          <div class="sup-value">${stat.value}</div>
+          <div class="sup-label">${stat.label}</div>
+          <div class="sup-source">${src ? src.label : stat.source}</div>
+        </div>`;
+    });
+    html += `</div>`;
+
+    /* Diagnostic */
+    html += `<p class="br-diagnostic">${content.diagnostic}</p>`;
+
+    /* Implication */
+    html += `
+      <div class="br-implication">
+        <div class="implication-eyebrow">The priority</div>
+        <p class="implication-text">${content.implication}</p>
+      </div>`;
+  }
+
+  html += `</div>`;
+  return html;
 }
 
-function getFeedback(allFeedback, bucketId, pct) {
-  return allFeedback.find(f =>
-    f.bucket_id === bucketId && pct >= f.score_min && pct <= f.score_max
-  );
-}
-
+/* ─────────────────────────────────────────────
+   Main load
+───────────────────────────────────────────── */
 async function loadReport() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-
   if (!id) { showError(); return; }
 
-  const [{ data: response, error: rErr }, { data: allFeedback, error: fErr }] = await Promise.all([
-    sb.from('survey_responses').select('scores, created_at').eq('id', id).single(),
-    sb.from('bucket_feedback').select('*'),
-  ]);
+  const { data: response, error } = await sb
+    .from('survey_responses')
+    .select('scores, created_at')
+    .eq('id', id)
+    .single();
 
-  if (rErr || !response) { showError(); return; }
+  if (error || !response) { showError(); return; }
 
   const { scores } = response;
 
-  // Date
+  /* Date */
   const d = new Date(response.created_at);
   document.getElementById('reportDate').textContent =
     d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  // Overall card
+  /* Overall card */
   const avg = scores.overall;
   document.getElementById('overallCard').innerHTML = `
     <div>
@@ -381,7 +789,7 @@ async function loadReport() {
       <p class="overall-text-body">${overallMessage(avg)}</p>
     </div>`;
 
-  // Callouts
+  /* Callout boxes — keep original thresholds (≥80 excellence, <30 gap) */
   const excellence = scores.buckets.filter(b => b.pct >= 80);
   const gaps       = scores.buckets.filter(b => b.pct < 30);
 
@@ -396,29 +804,33 @@ async function loadReport() {
       gaps.map(b => BUCKET_LABELS[b.id].title).join(' · ');
   }
 
-  // Bucket breakdown
-  let html = '';
-  scores.buckets.forEach(b => {
-    const label = BUCKET_LABELS[b.id];
-    const [lvlText, lvlClass, barClass] = levelInfo(b.pct);
-    const fb = allFeedback ? getFeedback(allFeedback, b.id, b.pct) : null;
-    html += `
-      <div class="bucket-result">
-        <div class="br-top">
-          <div class="br-meta">
-            <span class="br-num">${label.num}</span>
-            <span class="br-title">${label.title}</span>
-          </div>
-          <div class="br-pct">${b.pct}%</div>
-        </div>
-        <div class="br-bar-wrap"><div class="br-bar ${barClass}" style="width:${b.pct}%"></div></div>
-        <div class="br-level ${lvlClass}">${lvlText}</div>
-        ${fb ? `<p class="br-paragraph">${fb.paragraph}</p>` : ''}
-      </div>`;
-  });
-  document.getElementById('bucketResults').innerHTML = html;
+  /* Bucket breakdown */
+  document.getElementById('bucketResults').innerHTML =
+    scores.buckets.map(b => renderBucket(b)).join('');
 
-  // Show report
+  /* References */
+  const usedSourceIds = new Set();
+  scores.buckets.forEach(b => {
+    const content = getBandContent(b.id, b.pct);
+    if (!content) return;
+    usedSourceIds.add(content.headline_stat.source);
+    content.supporting_stats.forEach(s => usedSourceIds.add(s.source));
+  });
+
+  const refsHtml = CONTENT.meta.sources
+    .filter(s => usedSourceIds.has(s.id))
+    .map(s => `
+      <div class="reference-item">
+        <div class="ref-id">${s.id}</div>
+        <div class="ref-body">
+          <strong>${s.label}</strong> — ${s.detail}
+          ${s.url ? `<br><a href="${s.url}" target="_blank" rel="noopener">${s.url}</a>` : ''}
+        </div>
+      </div>`)
+    .join('');
+  document.getElementById('referencesList').innerHTML = refsHtml;
+
+  /* Show report */
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('reportWrap').style.display = 'block';
 }
