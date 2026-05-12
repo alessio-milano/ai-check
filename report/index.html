@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Readiness Report · atrain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --atrain-navy:  #01436c;
+  --atrain-coral: #f25c54;
+  --atrain-sky:   #a7e3f2;
+
+  --navy-900: #01304d; --navy-800: #01436c; --navy-700: #0d5986;
+  --navy-600: #1e6f9e; --navy-500: #3c89b4; --navy-400: #70a7c6;
+  --navy-300: #a8c8db; --navy-200: #d0e1ec; --navy-100: #eaf2f7;
+  --navy-50:  #f5f9fc;
+
+  --coral-700: #b93d36; --coral-600: #d64a41; --coral-500: #f25c54;
+  --coral-400: #f58079; --coral-300: #f9a9a4; --coral-200: #fcd0cd;
+  --coral-100: #fdecea;
+
+  --sky-400: #a7e3f2; --sky-200: #dff4fa; --sky-100: #eff9fc;
+
+  --paper:   #fbfaf7;
+  --bone:    #f4f1eb;
+  --sand:    #e8e3d9;
+  --ink:     #14222c;
+  --ink-2:   #3a4a56;
+  --ink-3:   #6b7a85;
+  --ink-4:   #a3adb6;
+  --hairline: rgba(1, 67, 108, 0.12);
+
+  --bg:           var(--paper);
+  --fg:           var(--ink);
+  --fg-muted:     var(--ink-2);
+  --fg-subtle:    var(--ink-3);
+  --fg-brand:     var(--navy-800);
+  --fg-accent:    var(--coral-500);
+  --border:       var(--hairline);
+  --border-strong: rgba(1, 67, 108, 0.25);
+
+  --font-display: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-body:    'Inter', -apple-system, system-ui, sans-serif;
+
+  --fs-12: 0.75rem; --fs-14: 0.875rem; --fs-16: 1rem;
+  --fs-18: 1.125rem; --fs-20: 1.25rem; --fs-24: 1.5rem;
+  --fs-32: 2rem; --fs-44: 2.75rem; --fs-60: 3.75rem;
+
+  --lh-tight: 1.05; --lh-snug: 1.15; --lh-normal: 1.45; --lh-relaxed: 1.6;
+  --tr-tight: -0.02em; --tr-eyebrow: 0.18em;
+  --fw-light: 300; --fw-regular: 400; --fw-semibold: 600; --fw-bold: 700;
+
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px; --sp-9:96px;
+
+  --radius-sm:4px; --radius-md:8px; --radius-lg:16px; --radius-pill:9999px;
+  --shadow-xs: 0 1px 2px rgba(1,48,77,.06);
+  --shadow-sm: 0 2px 6px rgba(1,48,77,.08);
+  --shadow-md: 0 8px 24px rgba(1,48,77,.10);
+  --ease-out: cubic-bezier(0.22,1,0.36,1);
+  --dur-fast: 160ms; --dur-med: 260ms;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--fg);
+  font-size:var(--fs-16);font-weight:var(--fw-regular);line-height:var(--lh-relaxed);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+
+.eyebrow{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;color:var(--fg-accent);
+}
+
+/* ── Top bar ── */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:var(--bg);border-bottom:1px solid var(--border);
+  padding:var(--sp-4) clamp(var(--sp-5),6vw,80px);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-brand{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:var(--navy-800);
+}
+.topbar-date{
+  font-size:var(--fs-12);color:var(--fg-subtle);
+}
+
+/* ── Main layout ── */
+.report-content{
+  max-width:800px;margin:0 auto;
+  padding:var(--sp-8) clamp(var(--sp-5),6vw,80px) var(--sp-9);
+}
+
+/* ── Header ── */
+.report-header{margin-bottom:var(--sp-7);}
+.report-headline{
+  font-family:var(--font-display);
+  font-size:clamp(1.75rem,4vw,var(--fs-44));
+  font-weight:var(--fw-light);letter-spacing:var(--tr-tight);
+  color:var(--fg-brand);margin:var(--sp-3) 0 var(--sp-4);line-height:var(--lh-snug);
+}
+.report-lead{
+  font-size:var(--fs-18);font-weight:var(--fw-light);
+  color:var(--fg-muted);line-height:var(--lh-relaxed);
+}
+
+/* ── Overall card (dark) ── */
+.overall-card{
+  background:var(--navy-900);border-radius:var(--radius-lg);
+  padding:var(--sp-7);margin-bottom:var(--sp-7);
+  display:grid;grid-template-columns:120px 1fr;gap:var(--sp-6);
+  align-items:center;box-shadow:var(--shadow-md);
+}
+.overall-score{
+  font-family:var(--font-display);font-size:var(--fs-60);
+  font-weight:var(--fw-light);letter-spacing:var(--tr-tight);
+  color:var(--coral-400);line-height:1;text-align:center;
+}
+.overall-score-label{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:rgba(255,255,255,.28);margin-top:var(--sp-2);text-align:center;
+}
+.overall-text-title{
+  font-family:var(--font-display);font-size:var(--fs-24);
+  font-weight:var(--fw-light);color:#fff;letter-spacing:var(--tr-tight);
+  margin-bottom:var(--sp-3);
+}
+.overall-text-body{
+  font-size:var(--fs-16);font-weight:var(--fw-light);
+  color:rgba(255,255,255,.48);line-height:var(--lh-relaxed);
+}
+
+/* ── Section title ── */
+.section-title{
+  font-family:var(--font-display);font-size:var(--fs-20);
+  font-weight:var(--fw-light);letter-spacing:var(--tr-tight);
+  color:var(--fg-brand);margin-bottom:var(--sp-5);
+  padding-bottom:var(--sp-3);border-bottom:1px solid var(--border);
+}
+
+/* ── Bucket result ── */
+.bucket-result{
+  padding:var(--sp-6) 0;border-bottom:1px solid var(--border);
+}
+.bucket-result:last-child{border-bottom:none;}
+.br-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:var(--sp-3);
+}
+.br-meta{display:flex;align-items:baseline;gap:var(--sp-3);}
+.br-num{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:var(--fg-subtle);
+}
+.br-title{
+  font-size:var(--fs-18);font-weight:var(--fw-semibold);
+  color:var(--fg-brand);letter-spacing:var(--tr-tight);
+}
+.br-pct{
+  font-size:var(--fs-24);font-weight:var(--fw-light);
+  color:var(--fg-brand);letter-spacing:var(--tr-tight);
+}
+.br-bar-wrap{
+  height:2px;background:var(--sand);
+  border-radius:var(--radius-pill);overflow:hidden;margin-bottom:var(--sp-3);
+}
+.br-bar{
+  height:100%;border-radius:var(--radius-pill);background:var(--coral-500);
+  width:0%;transition:width .8s var(--ease-out);
+}
+.br-bar.level-strong-bar{background:var(--navy-700);}
+.br-bar.level-mid-bar{background:#c49a28;}
+.br-bar.level-low-bar{background:var(--coral-500);}
+.br-level{
+  font-size:11px;font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  margin-bottom:var(--sp-4);
+}
+.level-strong{color:var(--navy-700);}
+.level-mid{color:#8A6820;}
+.level-low{color:var(--coral-600);}
+.br-paragraph{
+  font-size:var(--fs-15,0.9375rem);font-weight:var(--fw-light);
+  color:var(--fg-muted);line-height:var(--lh-relaxed);
+}
+
+/* ── Callout cards (excellence / gap) ── */
+.callout-section{margin-top:var(--sp-7);}
+.callout-card{
+  border-radius:var(--radius-lg);padding:var(--sp-5) var(--sp-6);
+  margin-bottom:var(--sp-3);
+}
+.callout-card.excellence{
+  background:var(--navy-100);border:1px solid var(--navy-200);
+}
+.callout-card.gap{
+  background:var(--coral-100);border:1px solid var(--coral-200);
+}
+.callout-label{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  margin-bottom:var(--sp-2);
+}
+.callout-label.excellence{color:var(--navy-700);}
+.callout-label.gap{color:var(--coral-700);}
+.callout-items{
+  font-size:var(--fs-16);font-weight:var(--fw-regular);
+  color:var(--fg);line-height:var(--lh-relaxed);
+}
+
+/* ── Footer ── */
+.report-footer{
+  margin-top:var(--sp-7);padding-top:var(--sp-5);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:var(--sp-4);
+}
+.report-footer-note{
+  font-size:var(--fs-14);font-weight:var(--fw-light);color:var(--fg-subtle);
+}
+
+/* ── Loading / Error states ── */
+.state-wrap{
+  min-height:80vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:var(--sp-4);text-align:center;
+  padding:var(--sp-9) clamp(var(--sp-5),6vw,80px);
+}
+.state-title{
+  font-family:var(--font-display);font-size:var(--fs-24);
+  font-weight:var(--fw-light);color:var(--fg-brand);
+}
+.state-sub{font-size:var(--fs-16);color:var(--fg-subtle);}
+.spinner{
+  width:32px;height:32px;border:2px solid var(--sand);
+  border-top-color:var(--coral-500);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── Responsive ── */
+@media(max-width:560px){
+  .overall-card{grid-template-columns:1fr;gap:var(--sp-4);}
+  .overall-score{text-align:left;}
+  .overall-score-label{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">atrain · AI Readiness Report</span>
+  <span class="topbar-date" id="reportDate"></span>
+</div>
+
+<div id="loadingState" class="state-wrap">
+  <div class="spinner"></div>
+  <div class="state-title">Loading your report…</div>
+</div>
+
+<div id="errorState" class="state-wrap" style="display:none;">
+  <div class="state-title">Report not found</div>
+  <div class="state-sub">This link may be invalid or expired.</div>
+</div>
+
+<div id="reportWrap" style="display:none;">
+  <div class="report-content">
+
+    <div class="report-header">
+      <div class="eyebrow">AI Readiness Assessment</div>
+      <h1 class="report-headline">Your AI readiness<br>profile.</h1>
+      <p class="report-lead">Here's how your organisation scores across the five dimensions. Each result reflects your honest answers — not an ideal state.</p>
+    </div>
+
+    <div class="overall-card" id="overallCard"></div>
+
+    <div id="calloutExcellence" class="callout-section" style="display:none;">
+      <div class="callout-card excellence">
+        <div class="callout-label excellence">Area of excellence</div>
+        <div class="callout-items" id="excellenceItems"></div>
+      </div>
+    </div>
+
+    <div id="calloutGap" class="callout-section" style="display:none;margin-top:var(--sp-3);">
+      <div class="callout-card gap">
+        <div class="callout-label gap">Critical gap</div>
+        <div class="callout-items" id="gapItems"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--sp-7);">
+      <div class="section-title">Five-dimension breakdown</div>
+      <div id="bucketResults"></div>
+    </div>
+
+    <div class="report-footer">
+      <span class="report-footer-note">Contact atrain to discuss a structured next step.</span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://rwmiigbkytnguufskjpx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3bWlpZ2JreXRuZ3V1ZnNranB4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjczNTQsImV4cCI6MjA5MzYwMzM1NH0.6kVnnO_r7X_0Pkjw-eWZb8lquZ02iprsyrG7bzG1Erc';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const BUCKET_LABELS = [
+  { num: '01', title: 'Current state' },
+  { num: '02', title: 'Deep AI literacy' },
+  { num: '03', title: 'Workforce redesign' },
+  { num: '04', title: 'AI resilience' },
+  { num: '05', title: 'Ownership & culture' },
+];
+
+function levelInfo(pct) {
+  if (pct >= 80) return ['Area of excellence', 'level-strong', 'level-strong-bar'];
+  if (pct >= 30) return ['Developing',          'level-mid',    'level-mid-bar'];
+  return             ['Critical gap',           'level-low',    'level-low-bar'];
+}
+
+function overallMessage(avg) {
+  if (avg >= 70) return 'Your organisation has solid AI readiness foundations across most dimensions. The priority now is closing specific gaps and accelerating the areas that lag behind.';
+  if (avg >= 40) return 'You have real foundations in some areas, but meaningful gaps exist that will limit your AI transformation if left unaddressed. A structured programme across all three pillars is the right next step.';
+  return 'Your organisation is at an early stage of AI readiness. Starting from clarity is better than starting from false confidence. A Human-First AI Transformation can be designed from the ground up.';
+}
+
+function overallLevel(avg) {
+  if (avg >= 70) return 'Strong foundation';
+  if (avg >= 40) return 'Developing';
+  return 'Early stage';
+}
+
+function getFeedback(allFeedback, bucketId, pct) {
+  return allFeedback.find(f =>
+    f.bucket_id === bucketId && pct >= f.score_min && pct <= f.score_max
+  );
+}
+
+async function loadReport() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  if (!id) { showError(); return; }
+
+  const [{ data: response, error: rErr }, { data: allFeedback, error: fErr }] = await Promise.all([
+    sb.from('survey_responses').select('scores, created_at').eq('id', id).single(),
+    sb.from('bucket_feedback').select('*'),
+  ]);
+
+  if (rErr || !response) { showError(); return; }
+
+  const { scores } = response;
+
+  // Date
+  const d = new Date(response.created_at);
+  document.getElementById('reportDate').textContent =
+    d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  // Overall card
+  const avg = scores.overall;
+  document.getElementById('overallCard').innerHTML = `
+    <div>
+      <div class="overall-score">${avg}%</div>
+      <div class="overall-score-label">Overall</div>
+    </div>
+    <div>
+      <div class="overall-text-title">${overallLevel(avg)}</div>
+      <p class="overall-text-body">${overallMessage(avg)}</p>
+    </div>`;
+
+  // Callouts
+  const excellence = scores.buckets.filter(b => b.pct >= 80);
+  const gaps       = scores.buckets.filter(b => b.pct < 30);
+
+  if (excellence.length) {
+    document.getElementById('calloutExcellence').style.display = 'block';
+    document.getElementById('excellenceItems').textContent =
+      excellence.map(b => BUCKET_LABELS[b.id].title).join(' · ');
+  }
+  if (gaps.length) {
+    document.getElementById('calloutGap').style.display = 'block';
+    document.getElementById('gapItems').textContent =
+      gaps.map(b => BUCKET_LABELS[b.id].title).join(' · ');
+  }
+
+  // Bucket breakdown
+  let html = '';
+  scores.buckets.forEach(b => {
+    const label = BUCKET_LABELS[b.id];
+    const [lvlText, lvlClass, barClass] = levelInfo(b.pct);
+    const fb = allFeedback ? getFeedback(allFeedback, b.id, b.pct) : null;
+    html += `
+      <div class="bucket-result">
+        <div class="br-top">
+          <div class="br-meta">
+            <span class="br-num">${label.num}</span>
+            <span class="br-title">${label.title}</span>
+          </div>
+          <div class="br-pct">${b.pct}%</div>
+        </div>
+        <div class="br-bar-wrap"><div class="br-bar ${barClass}" style="width:${b.pct}%"></div></div>
+        <div class="br-level ${lvlClass}">${lvlText}</div>
+        ${fb ? `<p class="br-paragraph">${fb.paragraph}</p>` : ''}
+      </div>`;
+  });
+  document.getElementById('bucketResults').innerHTML = html;
+
+  // Show report
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('reportWrap').style.display = 'block';
+}
+
+function showError() {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'flex';
+}
+
+loadReport();
+</script>
+</body>
+</html>
