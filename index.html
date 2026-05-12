@@ -680,8 +680,7 @@ async function submitEmail(){
 
     if(!res.ok) throw new Error('Server error');
 
-    const base=window.location.href.replace(/\/[^\/]*(\/)?$/,'/');
-    const reportUrl=`${base}report/?id=${_savedReportId}`;
+    const reportUrl=window.location.origin+window.location.pathname.replace(/[^/]*$/,'')+'report/?id='+_savedReportId;
     document.getElementById('emailWrap').classList.remove('active');
     showLink(reportUrl);
 
