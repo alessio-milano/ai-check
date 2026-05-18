@@ -344,22 +344,23 @@ body{
 }
 .link-lead{
   font-size:var(--fs-16);font-weight:var(--fw-light);
-  color:rgba(255,255,255,.50);max-width:500px;
-  line-height:var(--lh-relaxed);margin-bottom:var(--sp-6);
+  color:rgba(255,255,255,.60);max-width:520px;
+  line-height:var(--lh-relaxed);margin-bottom:var(--sp-7);
 }
-.link-box{
-  display:flex;align-items:center;gap:var(--sp-3);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  border-radius:var(--radius-lg);padding:var(--sp-4) var(--sp-5);
-  margin-bottom:var(--sp-5);max-width:620px;width:100%;
+.link-lead a{color:var(--sky-400);text-decoration:none;}
+.link-lead a:hover{text-decoration:underline;}
+.ty-divider{
+  width:40px;height:1px;background:rgba(255,255,255,.15);
+  margin-bottom:var(--sp-7);
 }
-.link-url{
-  flex:1;font-size:var(--fs-14);font-weight:var(--fw-regular);
-  color:var(--sky-400);word-break:break-all;text-decoration:none;
-  font-family:monospace;
+.ty-cta-label{
+  font-size:var(--fs-12);font-weight:var(--fw-semibold);
+  letter-spacing:var(--tr-eyebrow);text-transform:uppercase;
+  color:rgba(255,255,255,.40);margin-bottom:var(--sp-5);
 }
-.link-url:hover{text-decoration:underline;}
-.link-actions{display:flex;gap:var(--sp-3);flex-wrap:wrap;}
+.ty-cta-links{display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center;}
+.btn-coral{background:var(--coral-500);color:#fff;border-color:var(--coral-500);}
+.btn-coral:hover{background:var(--coral-600);border-color:var(--coral-600);}
 </style>
 </head>
 <body>
@@ -459,23 +460,19 @@ body{
   <button class="btn btn-ghost" onclick="backToSurvey()" style="margin-top:var(--sp-4);">← Back to survey</button>
 </div>
 
-<!-- LINK REVEAL -->
+<!-- THANK YOU -->
 <div class="link-wrap" id="linkWrap">
   <div class="cover-arc cover-arc-1"></div>
   <div class="cover-arc cover-arc-2"></div>
   <div class="eyebrow">Assessment complete</div>
-  <h2 class="link-headline">Your report<br>is ready.</h2>
-  <p class="link-lead">Copy the link below to share your AI Readiness report, or open it now.</p>
-  <div class="link-box">
-    <a id="reportUrl" href="#" class="link-url" target="_blank"></a>
-    <button class="btn btn-ghost" id="copyBtn" onclick="copyLink()" style="flex-shrink:0;">Copy</button>
-  </div>
-  <div class="link-actions">
-    <a id="reportBtn" href="#" class="btn btn-primary" target="_blank">
-      View report
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-    </a>
-    <button class="btn btn-ghost" onclick="restart()">Start over</button>
+  <h2 class="link-headline">Thank you.</h2>
+  <p class="link-lead">Thank you for taking the AI Readiness Check. You'll receive your report in the next few minutes. If you don't see it, please check your spam or clutter folder or contact <a href="mailto:ai@atrain.com">ai@atrain.com</a>.</p>
+  <div class="ty-divider"></div>
+  <div class="ty-cta-label">Want to know more about atrain?</div>
+  <div class="ty-cta-links">
+    <a href="https://atrain.com/" class="btn btn-coral" target="_blank">Visit our website</a>
+    <a href="https://atrain.com/insights" class="btn btn-ghost" target="_blank">atrain's Insights</a>
+    <a href="https://www.linkedin.com/company/atrain-gmbh/" class="btn btn-ghost" target="_blank">Follow us on LinkedIn</a>
   </div>
 </div>
 
@@ -696,21 +693,8 @@ async function submitEmail(){
 function showLink(url){
   document.getElementById('surveyWrap').classList.remove('active');
   document.getElementById('submitBar').classList.remove('visible');
-  const linkWrap=document.getElementById('linkWrap');
-  linkWrap.classList.add('active');
-  document.getElementById('reportUrl').textContent=url;
-  document.getElementById('reportUrl').href=url;
-  document.getElementById('reportBtn').href=url;
+  document.getElementById('linkWrap').classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function copyLink(){
-  const url=document.getElementById('reportUrl').href;
-  navigator.clipboard.writeText(url).then(()=>{
-    const btn=document.getElementById('copyBtn');
-    btn.textContent='Copied!';
-    setTimeout(()=>btn.textContent='Copy',2000);
-  });
 }
 
 function restart(){
